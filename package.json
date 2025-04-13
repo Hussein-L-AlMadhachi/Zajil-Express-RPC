@@ -1,5 +1,5 @@
 {
-  "name": "@zajil/express-rpc",
+  "name": "zajil-express-rpc",
   "version": "0.0.1",
   "description": "make backend data types and functions accessible from frontend",
   "main": "main.js",
