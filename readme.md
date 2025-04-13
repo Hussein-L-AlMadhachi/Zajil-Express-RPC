@@ -1,5 +1,9 @@
-Call backend functions from the frontend directly (WIP)
+# Zajil RPC (WIP)
+make backend data types and functions accessible from frontend.
 
+No need to make complicated REST APIs just to call the backend function you want to call using REST API.
+
+Type-safe communication channel and forces javascript to use safe integers for better accuracy. 
 
 ### TODO:
 - [ ] Client library
