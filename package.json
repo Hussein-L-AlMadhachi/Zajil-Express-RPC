@@ -1,13 +1,14 @@
 {
   "name": "zajil-express-rpc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "make backend data types and functions accessible from frontend",
   "main": "main.js",
   "type": "module",
+  "keywords": ["zajil", "express", "javascript", "rpc" , "framework" , "backend" , "api" ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Hussein Al-Madhachi",
+  "author": "Hussein Layth Al-Madhachi",
   "license": "MIT",
   "dependencies": {
     "express": "^5.1.0"
