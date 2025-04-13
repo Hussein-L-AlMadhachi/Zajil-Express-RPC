@@ -1,6 +1,6 @@
 {
   "name": "zajil-express-rpc",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "make backend data types and functions accessible from frontend",
   "main": "main.js",
   "type": "module",
