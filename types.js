@@ -53,14 +53,17 @@ export function process_type_schema( type_schema , rpc_objects_lookup , obj_name
         let obj_definition = {};
 
         /* name objects with no names */
-        obj_name = obj_name===undefined? getAnonymousObjectName() : obj_name;
 
         for( let key in type_schema ) {
             obj_definition[ key ] = process_type_schema( type_schema[key] , rpc_objects_lookup );
         }
 
-        rpc_objects_lookup[ obj_name ] = obj_definition;
-        return "$"+String(obj_name);
+        if ( obj_name ) {
+            rpc_objects_lookup[ obj_name ] = obj_definition;
+            return "$"+obj_name;
+        }
+
+        return obj_definition;
 
     } else if ( typeof(type_schema) === "function" ) {
 
@@ -71,8 +74,9 @@ export function process_type_schema( type_schema , rpc_objects_lookup , obj_name
         if( rpc_objects_lookup[ class_name ] ) {
             return "$"+class_name
         }
-        
-        return process_type_schema( obj_schema , rpc_objects_lookup , class_name );
+
+        rpc_objects_lookup[ class_name ] = process_type_schema( obj_schema , rpc_objects_lookup , class_name );
+        return "$"+class_name;
 
     } else {
         throw Error( `${type_schema} is a not supported type.` );
@@ -82,10 +86,61 @@ export function process_type_schema( type_schema , rpc_objects_lookup , obj_name
 
 
 
+export function validate_types_1( value , type_schema , rpc_objects_lookup ) {
+    if ( typeof type_schema === "object" ) {
+
+        if( typeof value !== "object" ) {
+            return false;
+        }
+
+        for ( let key in type_schema ) {
+            if( ! validate_types_1(value[key] , type_schema[key] , rpc_objects_lookup ) ) return false;
+        }
+
+        return true;
+        
+    } else if ( type_schema[0] === "@" ) {
+
+        let state = value instanceof Array;
+        if ( !state ) return false;
+        let array_type = type_schema.substring( 1 );
+
+        for (const item of value) {
+            state = state && validate_types( item , array_type ,  );
+            if ( !state ) return false;
+        }
+
+        return true
+
+    } else if ( type_schema[0] === "$" ) {
+
+        let obj_name = type_schema.substring(1);
+        let obj_type_schema = rpc_objects_lookup[ obj_name ];
+        if ( !obj_type_schema ) return false; 
+
+        return validate_types_1( value , obj_type_schema , rpc_objects_lookup ) ;
+
+    } else if ( type_schema === "str" ) {
+        return typeof value === "string";
+
+    } else if ( type_schema === "int" ) {
+        return typeof value === "number" && Number.isSafeInteger(value);
+
+    } else if ( type_schema === "flt" ) {
+        return typeof value === "number" && Number.isFinite(value);
+        
+    } else if ( type_schema === "any" ) {
+        return true;
+
+    } else {
+        throw Error( `${typeof(value)} is not supported type.` )
+    }
+
+}
 
 
 export function validate_types( value , type_schema , rpc_objects_lookup ) {
-
+    
     if ( type_schema[0] === "@" ) {
         let state = value instanceof Array;
         let array_type = type_schema.substring( 1 );
