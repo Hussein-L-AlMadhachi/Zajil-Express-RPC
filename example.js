@@ -1,7 +1,7 @@
 
 import express from 'express';
 import { Zajil , int , string , float } from "./rpc.js";
-
+import { validate_types_1 } from "./types.js"
 
 
 // class templates to be shared with frontend
@@ -49,6 +49,11 @@ rpc.function (
     }
 )
 
+//console.log( rpc.rpc_objects_lookup );
+
+let a = validate_types_1( {status:201 , msg:"good" , data: { name:"hussein" , age:21 } } , "$response" , rpc.rpc_objects_lookup );
+
+console.log( "valid: ", a );
 
 const app = express()
 
