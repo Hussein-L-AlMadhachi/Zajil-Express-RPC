@@ -1,4 +1,4 @@
-# Zajil RPC (WIP)
+# Zajil RPC (broken)
 make backend data types and functions accessible from frontend.
 
 No need to make complicated REST APIs just to call the backend function you want to call using REST API.
